@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="#444444"
+    android:layout_height="match_parent">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/pager2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.davidmedenjak.pagerindicator.PagerIndicatorView
+        android:id="@+id/indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:colorBackground="#334411"
+        android:colorFocusedHighlight="#FF0000"
+        app:pi_length="24dp"
+        app:pi_padding="8dp"
+        app:pi_size="8dp"
+        app:pi_edgeAnimation="size|alpha"
+        app:pi_type="line"
+        android:layout_gravity="bottom|center_horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp" />
+</FrameLayout>

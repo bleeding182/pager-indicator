@@ -1,0 +1,1 @@
+include ':app', ':core', ':viewpager', ':viewpager2', ':recyclerview', ':all'

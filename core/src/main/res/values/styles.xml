@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="PagerIndicator" />
+
+    <style name="PagerIndicator.Circle"></style>
+
+    <style name="PagerIndicator.Line">
+        <item name="android:colorFocusedHighlight">#ffffff</item>
+        <item name="android:colorBackground">#99000000</item>
+    </style>
+</resources>
