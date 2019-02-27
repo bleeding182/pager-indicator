@@ -29,7 +29,7 @@ abstract class PagerIndicator {
     }
 
     public int getWidth(int items) {
-        final int actualItems = Math.min(maxDisplayedItems, items);
+        final int actualItems = Math.min(maxDisplayedItems + 2, items);
         if (actualItems == 0) return 0;
 
         final float totalLength = actualItems * indicatorLength;
@@ -101,7 +101,7 @@ abstract class PagerIndicator {
 
     private int getNormalizedActiveItem(int items, int active, int nonAnimatedOffset) {
         final int normalizedActiveItem;
-        if (active < nonAnimatedOffset) {
+        if (items <= maxDisplayedItems || active < nonAnimatedOffset) {
             normalizedActiveItem = active;
         } else if (items - nonAnimatedOffset <= active) {
             normalizedActiveItem = maxDisplayedItems - (items - active);
