@@ -16,17 +16,17 @@ public class LinePagerIndicator extends PagerIndicator {
     @Override
     protected void drawIndicator(Canvas canvas, float visibility) {
         paint.setColor(colorBackground);
-        paint.setStrokeWidth(getItemSize());
+        paint.setStrokeWidth(getIndicatorHeight());
         if ((getEdgeAnimationFlags() & FLAG_ALPHA) == FLAG_ALPHA) {
             paint.setAlpha((int) (visibility * Color.alpha(colorBackground)));
         }
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(getItemSize());
+        paint.setStrokeWidth(getIndicatorHeight());
         canvas.drawLine(
-                getItemPadding() / 2,
-                getItemSize() / 2,
-                getItemLength() - getItemPadding() / 2,
-                getItemSize() / 2,
+                getIndicatorPadding() / 2,
+                getIndicatorHeight() / 2,
+                getIndicatorLength() - getIndicatorPadding() / 2,
+                getIndicatorHeight() / 2,
                 paint
         );
     }
@@ -34,21 +34,21 @@ public class LinePagerIndicator extends PagerIndicator {
     @Override
     protected void drawActiveIndicator(Canvas canvas, float progress, float visibility) {
         paint.setColor(colorFocused);
-        paint.setStrokeWidth(getItemSize());
+        paint.setStrokeWidth(getIndicatorHeight());
         if (progress >= 0) {
             canvas.drawLine(
-                    getItemPadding() / 2 + (getItemLength() - getItemPadding()) * progress,
-                    getItemSize() / 2,
-                    getItemLength() - getItemPadding() / 2,
-                    getItemSize() / 2,
+                    getIndicatorPadding() / 2 + (getIndicatorLength() - getIndicatorPadding()) * progress,
+                    getIndicatorHeight() / 2,
+                    getIndicatorLength() - getIndicatorPadding() / 2,
+                    getIndicatorHeight() / 2,
                     paint
             );
         } else if (progress < 0) {
             canvas.drawLine(
-                    getItemPadding() / 2,
-                    getItemSize() / 2,
-                    getItemLength() - getItemPadding() / 2 - (getItemLength() - getItemPadding()) * (progress + 1),
-                    getItemSize() / 2,
+                    getIndicatorPadding() / 2,
+                    getIndicatorHeight() / 2,
+                    getIndicatorLength() - getIndicatorPadding() / 2 - (getIndicatorLength() - getIndicatorPadding()) * (progress + 1),
+                    getIndicatorHeight() / 2,
                     paint
             );
         }

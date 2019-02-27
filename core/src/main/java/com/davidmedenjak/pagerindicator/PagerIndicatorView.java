@@ -73,15 +73,15 @@ public class PagerIndicatorView extends View {
         final DisplayMetrics dm = getResources().getDisplayMetrics();
         final float dp2 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, dm);
         final int size = a.getDimensionPixelSize(R.styleable.PagerIndicatorView_pi_size, (int) dp2);
-        indicator.setItemSize(size);
+        indicator.setIndicatorHeight(size);
 
         float dp4 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, dm);
         final int padding = a.getDimensionPixelSize(R.styleable.PagerIndicatorView_pi_padding, (int) dp4);
-        indicator.setItemPadding(padding);
+        indicator.setIndicatorPadding(padding);
 
         float dp12 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, dm);
         final int length = a.getDimensionPixelSize(R.styleable.PagerIndicatorView_pi_length, (int) dp12);
-        indicator.setItemLength(length);
+        indicator.setIndicatorLength(length);
 
         final int edgeAnimationFlags = a.getInt(R.styleable.PagerIndicatorView_pi_edgeAnimation, PagerIndicator.FLAG_ALPHA);
         indicator.setEdgeAnimationFlags(edgeAnimationFlags);
@@ -125,7 +125,7 @@ public class PagerIndicatorView extends View {
             case MeasureSpec.AT_MOST:
             case MeasureSpec.UNSPECIFIED:
                 height = Math.min(
-                        indicator.getHeight(itemCount) + getPaddingTop() + getPaddingBottom(),
+                        indicator.getHeight() + getPaddingTop() + getPaddingBottom(),
                         MeasureSpec.getSize(heightMeasureSpec)
                 );
                 break;

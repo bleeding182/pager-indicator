@@ -11,13 +11,15 @@ abstract class PagerIndicator {
     public final static int FLAG_SIZE = 1;
     public final static int FLAG_ALPHA = 2;
 
+    private final Rect bounds = new Rect();
+
     private int edgeAnimationFlags;
 
-    private float itemLength;
-    private float itemSize;
-    private float itemPadding;
+    private float indicatorLength;
+    private float indicatorPadding;
 
-    private Rect bounds = new Rect();
+    private float indicatorHeight;
+
     private int maxDisplayedItems = 3;
 
     protected int colorFocused;
@@ -29,11 +31,14 @@ abstract class PagerIndicator {
     public int getWidth(int items) {
         final int actualItems = Math.min(maxDisplayedItems, items);
         if (actualItems == 0) return 0;
-        return (int) (actualItems * itemLength + (actualItems - 1) * itemPadding);
+
+        final float totalLength = actualItems * indicatorLength;
+        final float totalPadding = (actualItems - 1) * indicatorPadding;
+        return (int) (totalLength + totalPadding);
     }
 
-    public int getHeight(int items) {
-        return (int) itemSize;
+    public int getHeight() {
+        return (int) indicatorHeight;
     }
 
     public void setBounds(int width, int height) {
@@ -50,17 +55,17 @@ abstract class PagerIndicator {
         final boolean isAnimating = maxDisplayedItems < items && active >= nonAnimatedOffset && active < items - nonAnimatedOffset - 1;
         final float animationOffset;
         if (isAnimating) {
-            animationOffset = (itemLength + itemPadding) * -progress;
+            animationOffset = (indicatorLength + indicatorPadding) * -progress;
         } else {
             animationOffset = 0F;
         }
 
         final Rect bounds = getBounds();
-        final int maxPossibleItems = (int) (1 + (bounds.width() - itemLength) / (itemLength + itemPadding));
+        final int maxPossibleItems = (int) (1 + (bounds.width() - indicatorLength) / (indicatorLength + indicatorPadding));
         final int itemsToDraw = Math.min(maxPossibleItems, Math.min(maxDisplayedItems, items));
 
         final int itemMeasuredWidth = getWidth(itemsToDraw);
-        final int itemMeasuredHeight = getHeight(itemsToDraw);
+        final int itemMeasuredHeight = getHeight();
         final int offsetX = (bounds.width() - itemMeasuredWidth) / 2;
         final int offsetY = (bounds.height() - itemMeasuredHeight);
 
@@ -79,11 +84,11 @@ abstract class PagerIndicator {
     private void drawBackground(Canvas canvas, float progress, boolean isAnimating, int itemsToDraw) {
         // animate the first item if scrolling
         drawIndicator(canvas, isAnimating ? 1 - progress : 1F);
-        canvas.translate(itemLength + itemPadding, 0F);
+        canvas.translate(indicatorLength + indicatorPadding, 0F);
 
         for (int i = 1; i < itemsToDraw; i++) {
             drawIndicator(canvas, 1F);
-            canvas.translate(itemLength + itemPadding, 0F);
+            canvas.translate(indicatorLength + indicatorPadding, 0F);
         }
 
         if (isAnimating && progress > 0F) {
@@ -105,10 +110,10 @@ abstract class PagerIndicator {
     }
 
     private void drawActiveIndicator(Canvas canvas, float progress, int activeItem) {
-        canvas.translate(activeItem * itemLength + activeItem * itemPadding, 0F);
+        canvas.translate(activeItem * indicatorLength + activeItem * indicatorPadding, 0F);
         drawActiveIndicator(canvas, progress, 1F);
         if (progress != 0F) {
-            canvas.translate(itemLength + itemPadding, 0F);
+            canvas.translate(indicatorLength + indicatorPadding, 0F);
             drawActiveIndicator(canvas, -progress, progress);
         }
     }
@@ -136,28 +141,28 @@ abstract class PagerIndicator {
      */
     abstract protected void drawActiveIndicator(Canvas canvas, float progress, float visibility);
 
-    public void setItemSize(int size) {
-        this.itemSize = size;
+    public void setIndicatorHeight(int size) {
+        this.indicatorHeight = size;
     }
 
-    public float getItemSize() {
-        return itemSize;
+    public float getIndicatorHeight() {
+        return indicatorHeight;
     }
 
-    public float getItemLength() {
-        return itemLength;
+    public float getIndicatorLength() {
+        return indicatorLength;
     }
 
-    public void setItemLength(float length) {
-        this.itemLength = length;
+    public void setIndicatorLength(float length) {
+        this.indicatorLength = length;
     }
 
-    public float getItemPadding() {
-        return itemPadding;
+    public float getIndicatorPadding() {
+        return indicatorPadding;
     }
 
-    public void setItemPadding(float padding) {
-        this.itemPadding = padding;
+    public void setIndicatorPadding(float padding) {
+        this.indicatorPadding = padding;
     }
 
     public int getMaxDisplayedItems() {
