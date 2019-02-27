@@ -52,9 +52,11 @@ abstract class PagerIndicator {
     public void draw(Canvas canvas, int items, int active, float progress) {
         final int nonAnimatedOffset = maxDisplayedItems / 2;
 
-        final boolean isAnimating = maxDisplayedItems < items && active >= nonAnimatedOffset && active < items - nonAnimatedOffset - 1;
+        int indexOffset = maxDisplayedItems % 2 == 0 ? 0 : 1;
+        final boolean isAnimatingVisibleItems = maxDisplayedItems < items && active >= nonAnimatedOffset && active < items - nonAnimatedOffset - indexOffset;
+
         final float animationOffset;
-        if (isAnimating) {
+        if (isAnimatingVisibleItems) {
             animationOffset = (indicatorLength + indicatorPadding) * -progress;
         } else {
             animationOffset = 0F;
@@ -71,7 +73,7 @@ abstract class PagerIndicator {
 
         final int saveBackground = canvas.save();
         canvas.translate(offsetX + animationOffset, offsetY);
-        drawBackground(canvas, progress, isAnimating, itemsToDraw);
+        drawBackground(canvas, progress, isAnimatingVisibleItems, itemsToDraw);
         canvas.restoreToCount(saveBackground);
 
         final int saveActive = canvas.save();
