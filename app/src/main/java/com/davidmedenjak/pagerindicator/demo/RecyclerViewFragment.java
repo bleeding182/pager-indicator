@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.davidmedenjak.pagerindicator.PagerIndicatorView;
 import com.davidmedenjak.pagerindicator.RecyclerViewPagerListener;
 import com.davidmedenjak.pagerindicator.demo.adapters.DummyAdapter;
 
@@ -33,7 +32,6 @@ public class RecyclerViewFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity(), RecyclerView.HORIZONTAL, false));
         new PagerSnapHelper().attachToRecyclerView(recyclerView);
 
-        PagerIndicatorView indicator = view.findViewById(R.id.indicator);
-        indicator.setPager(new RecyclerViewPagerListener(recyclerView));
+        Indicators.bindIndicators(view, () -> new RecyclerViewPagerListener(recyclerView));
     }
 }

@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.davidmedenjak.pagerindicator.PagerIndicatorView;
 import com.davidmedenjak.pagerindicator.ViewPagerPagerListener;
 import com.davidmedenjak.pagerindicator.demo.adapters.DummyPagerAdapter;
 
@@ -29,7 +28,6 @@ public class ViewPagerFragment extends Fragment {
         ViewPager pager = view.findViewById(R.id.pager);
         pager.setAdapter(new DummyPagerAdapter());
 
-        PagerIndicatorView indicator = view.findViewById(R.id.indicator);
-        indicator.setPager(new ViewPagerPagerListener(pager));
+        Indicators.bindIndicators(view, () -> new ViewPagerPagerListener(pager));
     }
 }
