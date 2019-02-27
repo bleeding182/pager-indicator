@@ -15,7 +15,7 @@ import androidx.annotation.RequiresApi;
 
 public class PagerIndicatorView extends View {
 
-    private PagerIndicator indicator = new PagerIndicator();
+    private PagerIndicator indicator;
     private PagerListener listener;
 
     private PagerCallback pagerCallback = new PagerCallback() {
@@ -61,6 +61,15 @@ public class PagerIndicatorView extends View {
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.PagerIndicatorView, defStyleAttr, defStyleRes);
 
+        final int type = a.getInt(R.styleable.PagerIndicatorView_pi_type, PagerIndicator.TYPE_LINE);
+        if (type == PagerIndicator.TYPE_LINE) {
+            indicator = new LinePagerIndicator();
+        } else if (type == PagerIndicator.TYPE_CIRCLE) {
+            indicator = new CirclePagerIndicator();
+        } else {
+            throw new IllegalStateException("Unknown type " + type);
+        }
+
         final DisplayMetrics dm = getResources().getDisplayMetrics();
         final float dp2 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, dm);
         final int size = a.getDimensionPixelSize(R.styleable.PagerIndicatorView_pi_size, (int) dp2);
@@ -76,9 +85,6 @@ public class PagerIndicatorView extends View {
 
         final int edgeAnimationFlags = a.getInt(R.styleable.PagerIndicatorView_pi_edgeAnimation, PagerIndicator.FLAG_ALPHA);
         indicator.setEdgeAnimationFlags(edgeAnimationFlags);
-
-        final int type = a.getInt(R.styleable.PagerIndicatorView_pi_type, PagerIndicator.TYPE_LINE);
-        indicator.setType(type);
 
         final int colorBackground = a.getColor(R.styleable.PagerIndicatorView_android_colorBackground, Color.GRAY);
         indicator.setColorBackground(colorBackground);
@@ -144,7 +150,11 @@ public class PagerIndicatorView extends View {
         super.onDraw(canvas);
         int save = canvas.save();
         canvas.translate(getPaddingLeft(), getPaddingTop());
-        indicator.draw(canvas, itemCount, currentPosition, currentPositionOffset);
+        if (isInEditMode()) {
+            indicator.draw(canvas, itemCount, currentPosition, 0.1F);
+        } else {
+            indicator.draw(canvas, itemCount, currentPosition, currentPositionOffset);
+        }
         canvas.restoreToCount(save);
     }
 

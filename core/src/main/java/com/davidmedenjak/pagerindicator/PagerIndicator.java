@@ -1,20 +1,17 @@
 package com.davidmedenjak.pagerindicator;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 
-public class PagerIndicator {
-
-    public final static int FLAG_SIZE = 1;
-    public final static int FLAG_ALPHA = 2;
+abstract class PagerIndicator {
 
     public static final int TYPE_LINE = 0;
     public static final int TYPE_CIRCLE = 1;
 
+    public final static int FLAG_SIZE = 1;
+    public final static int FLAG_ALPHA = 2;
+
     private int edgeAnimationFlags;
-    private int type;
 
     private float itemLength;
     private float itemSize;
@@ -23,13 +20,10 @@ public class PagerIndicator {
     private Rect bounds = new Rect();
     private int maxDisplayedItems = 3;
 
-    private Paint paint = new Paint();
-    private int colorFocused;
-    private int colorBackground;
+    protected int colorFocused;
+    protected int colorBackground;
 
     public PagerIndicator() {
-        paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setAntiAlias(true);
     }
 
     public int getWidth(int items) {
@@ -126,38 +120,7 @@ public class PagerIndicator {
      * @param visibility a value [0, 1] indicating an ongoing animation.
      *                   Use this to scale / fade indicators on the edges.
      */
-    protected void drawIndicator(Canvas canvas, float visibility) {
-        paint.setColor(colorBackground);
-        paint.setStrokeWidth(itemSize);
-        if ((edgeAnimationFlags & FLAG_ALPHA) == FLAG_ALPHA) {
-            paint.setAlpha((int) (visibility * Color.alpha(colorBackground)));
-        }
-        if (type == TYPE_LINE) {
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(itemSize);
-            canvas.drawLine(
-                    itemPadding / 2,
-                    itemSize / 2,
-                    itemLength - itemPadding / 2,
-                    itemSize / 2,
-                    paint
-            );
-        } else if (type == TYPE_CIRCLE) {
-            paint.setStyle(Paint.Style.FILL);
-            final float radius;
-            if ((edgeAnimationFlags & FLAG_SIZE) == FLAG_SIZE) {
-                radius = visibility * itemSize / 2F;
-            } else {
-                radius = itemSize / 2F;
-            }
-            canvas.drawCircle(
-                    (itemPadding + itemLength) / 2F,
-                    itemSize / 2F,
-                    radius,
-                    paint
-            );
-        }
-    }
+    abstract protected void drawIndicator(Canvas canvas, float visibility);
 
     /**
      * Draw the active indicators. This will be called after {@link #drawIndicator(Canvas, float)}
@@ -171,43 +134,7 @@ public class PagerIndicator {
      * @param visibility a value [0, 1] indicating an ongoing animation.
      *                   Use this to scale / fade indicators on the edges.
      */
-    protected void drawActiveIndicator(Canvas canvas, float progress, float visibility) {
-        paint.setColor(colorFocused);
-        if (type == TYPE_LINE) {
-            paint.setStrokeWidth(itemSize);
-            if (progress >= 0) {
-                canvas.drawLine(
-                        itemPadding / 2 + (itemLength - itemPadding) * progress,
-                        itemSize / 2,
-                        itemLength - itemPadding / 2,
-                        itemSize / 2,
-                        paint
-                );
-            } else if (progress < 0) {
-                canvas.drawLine(
-                        itemPadding / 2,
-                        itemSize / 2,
-                        itemLength - itemPadding / 2 - (itemLength - itemPadding) * (progress + 1),
-                        itemSize / 2,
-                        paint
-                );
-            }
-        } else if (type == TYPE_CIRCLE) {
-            paint.setStyle(Paint.Style.FILL);
-            final float radius;
-            if (progress < 0) {
-                radius = (Math.abs(progress)) * itemSize / 2F;
-            } else {
-                radius = (1 - progress) * itemSize / 2F;
-            }
-            canvas.drawCircle(
-                    (itemPadding + itemLength) / 2F,
-                    itemSize / 2F,
-                    radius,
-                    paint
-            );
-        }
-    }
+    abstract protected void drawActiveIndicator(Canvas canvas, float progress, float visibility);
 
     public void setItemSize(int size) {
         this.itemSize = size;
@@ -247,14 +174,6 @@ public class PagerIndicator {
 
     public int getEdgeAnimationFlags() {
         return edgeAnimationFlags;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public int getType() {
-        return type;
     }
 
     public void setColorBackground(int colorBackground) {
